@@ -10,9 +10,9 @@ exports.up = function(knex, Promise) {
       .integer('article_id')
       .references('articles.article_id')
       .notNullable();
-    commentsTable.string('body').notNullable();
+    commentsTable.text('body').notNullable();
     commentsTable.integer('votes').defaultsTo(0);
-    commentsTable.date('created_at').notNullable();
+    commentsTable.timestamp('created_at').notNullable();
   });
 };
 
