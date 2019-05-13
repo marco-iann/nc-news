@@ -1,0 +1,28 @@
+{
+  "name": "nc-news",
+  "version": "1.0.0",
+  "description": "",
+  "main": "knexfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "setup-db": "psql -f ./db/setup.sql",
+    "migrate-make": "knex migrate:make",
+    "migrate-latest": "knex migrate:latest",
+    "migrate-rollback": "knex migrate:rollback"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/marco-iann/nc-news.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/marco-iann/nc-news/issues"
+  },
+  "homepage": "https://github.com/marco-iann/nc-news#readme",
+  "dependencies": {
+    "knex": "^0.16.7",
+    "pg": "^7.11.0"
+  }
+}
