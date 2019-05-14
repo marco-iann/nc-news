@@ -14,5 +14,6 @@ exports.selectArticles = () => {
     .from('articles')
     .leftJoin('comments', 'articles.article_id', '=', 'comments.article_id')
     .groupBy('articles.article_id')
+    .orderBy('created_at', 'desc')
     .returning('*');
 };

@@ -24,13 +24,13 @@ describe('/api', () => {
   });
 
   describe('/articles', () => {
-    it('GET: returns 200 and a list of articles', () => {
+    it('GET: returns 200 and a list of articles sorted by date', () => {
       return request(app)
         .get('/api/articles')
         .expect(200)
         .then(({ body }) => {
           expect(body.articles).to.have.length(12);
-          expect(body.articles[7].comment_count).to.equal('13');
+          expect(body.articles[0].comment_count).to.equal('13');
           body.articles.forEach(article => {
             expect(article).to.have.all.keys(
               'author',
