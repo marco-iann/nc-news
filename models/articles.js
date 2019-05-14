@@ -1,6 +1,6 @@
 const connection = require('../db/connection');
 
-exports.selectArticles = () => {
+exports.selectArticles = query => {
   return connection
     .select(
       'articles.author',
@@ -14,6 +14,6 @@ exports.selectArticles = () => {
     .from('articles')
     .leftJoin('comments', 'articles.article_id', '=', 'comments.article_id')
     .groupBy('articles.article_id')
-    .orderBy('created_at', 'desc')
+    .orderBy('created_at', query.order || 'desc')
     .returning('*');
 };
