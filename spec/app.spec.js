@@ -16,8 +16,32 @@ describe('/api', () => {
         .expect(200)
         .then(({ body }) => {
           expect(body.topics).to.have.length(3);
-          expect(body.topics[0]).to.have.property('slug');
-          expect(body.topics[0]).to.have.property('description');
+          body.topics.forEach(topic => {
+            expect(topic).to.have.all.keys('slug', 'description');
+          });
+        });
+    });
+  });
+
+  describe('/articles', () => {
+    it('GET: returns 200 and a list of articles', () => {
+      return request(app)
+        .get('/api/articles')
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.articles).to.have.length(12);
+          expect(body.articles[7].comment_count).to.equal('13');
+          body.articles.forEach(article => {
+            expect(article).to.have.all.keys(
+              'author',
+              'title',
+              'topic',
+              'created_at',
+              'votes',
+              'comment_count',
+              'article_id'
+            );
+          });
         });
     });
   });
