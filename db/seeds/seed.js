@@ -40,6 +40,5 @@ exports.seed = (knex, Promise) => {
       return knex('comments')
         .insert(formattedComments)
         .returning('*');
-    })
-    .then(() => console.log('Finished seeding'));
+    });
 };

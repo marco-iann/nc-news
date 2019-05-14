@@ -1,6 +1,6 @@
 const connection = require('../db/connection');
 
-exports.selectArticles = ({ sort_by, order, author, topic }) => {
+const selectArticles = ({ sort_by, order, author, topic }) => {
   return connection
     .select(
       'articles.author',
@@ -21,3 +21,12 @@ exports.selectArticles = ({ sort_by, order, author, topic }) => {
     .orderBy(sort_by || 'created_at', order || 'desc')
     .returning('*');
 };
+
+const selectArticleById = id => {
+  return selectArticles({}).then(articles => {
+    const article = articles.find(article => article.article_id === 1);
+    return Promise.resolve(article);
+  });
+};
+
+module.exports = { selectArticles, selectArticleById };

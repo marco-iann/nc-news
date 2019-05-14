@@ -28,7 +28,7 @@ describe('/api', () => {
   });
 
   describe('/articles', () => {
-    it('GET: returns 200 and a list of articles sorted by date in descending order by default', () => {
+    it('GET: responds with 200 and a list of articles sorted by date in descending order by default', () => {
       return request(app)
         .get('/api/articles')
         .expect(200)
@@ -91,6 +91,26 @@ describe('/api', () => {
           body.articles.forEach(article => {
             expect(article.topic).to.eql('mitch');
           });
+        });
+    });
+  });
+
+  describe('/articles/:article_id', () => {
+    it('GET: responds with 200 and the selected article', () => {
+      return request(app)
+        .get('/api/articles/1')
+        .expect(200)
+        .then(({ body }) => {
+          expect(body).to.have.all.keys(
+            'author',
+            'title',
+            'topic',
+            'created_at',
+            'votes',
+            'comment_count',
+            'article_id'
+          );
+          expect(body.article_id).to.equal(1);
         });
     });
   });
