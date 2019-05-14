@@ -6,7 +6,7 @@ const {
 } = require('./utils');
 const { expect } = require('chai');
 
-describe('formatTimestamp()', () => {
+describe('formatTimestamps()', () => {
   it('returns an empty array if passed an empty collection of articles', () => {
     expect(formatTimestamps([])).to.eql([]);
   });
