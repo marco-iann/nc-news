@@ -51,6 +51,16 @@ describe('/api', () => {
           });
         });
     });
+    it('GET: can sort articles by topic if passed a query', () => {
+      return request(app)
+        .get('/api/articles?sort_by=topic')
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.articles).to.be.sortedBy('topic', {
+            descending: true
+          });
+        });
+    });
     it('GET: can sort articles by date in ascending order if passed a query', () => {
       return request(app)
         .get('/api/articles?order=asc')
@@ -58,6 +68,28 @@ describe('/api', () => {
         .then(({ body }) => {
           expect(body.articles).to.be.sortedBy('created_at', {
             ascending: true
+          });
+        });
+    });
+    it('GET: can filter articles by author if passed a query', () => {
+      return request(app)
+        .get('/api/articles?author=rogersop')
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.articles).to.have.length(3);
+          body.articles.forEach(article => {
+            expect(article.author).to.eql('rogersop');
+          });
+        });
+    });
+    it('GET: can filter articles by topic if passed a query', () => {
+      return request(app)
+        .get('/api/articles?topic=mitch')
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.articles).to.have.length(11);
+          body.articles.forEach(article => {
+            expect(article.topic).to.eql('mitch');
           });
         });
     });
