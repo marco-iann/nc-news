@@ -4,7 +4,7 @@
   "description": "",
   "main": "knexfile.js",
   "scripts": {
-    "test": "mocha --watch spec/*.spec.js",
+    "test": "mocha spec/*.spec.js",
     "test-utils": "mocha --watch ./db/utils/utils.spec.js",
     "setup-db": "psql -f ./db/setup.sql",
     "migrate-make": "knex migrate:make",
