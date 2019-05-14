@@ -89,7 +89,7 @@ describe('formatComments()', () => {
   });
 });
 
-describe.only('renameKeys()', () => {
+describe('renameKeys()', () => {
   it('returns an empty array if passed an empty collection', () => {
     expect(renameKeys([])).to.eql([]);
   });
