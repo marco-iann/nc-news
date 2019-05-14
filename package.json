@@ -5,11 +5,13 @@
   "main": "knexfile.js",
   "scripts": {
     "test": "mocha --watch spec",
+    "test-utils": "mocha --watch ./db/utils/utils.spec.js",
     "setup-db": "psql -f ./db/setup.sql",
     "migrate-make": "knex migrate:make",
     "migrate-latest": "knex migrate:latest",
     "migrate-rollback": "knex migrate:rollback",
-    "seed": "knex seed:run"
+    "seed": "knex seed:run",
+    "dev": "nodemon listen.js"
   },
   "repository": {
     "type": "git",
@@ -23,11 +25,14 @@
   },
   "homepage": "https://github.com/marco-iann/nc-news#readme",
   "dependencies": {
+    "express": "^4.16.4",
     "knex": "^0.16.7",
     "pg": "^7.11.0"
   },
   "devDependencies": {
     "chai": "^4.2.0",
-    "mocha": "^6.1.4"
+    "mocha": "^6.1.4",
+    "nodemon": "^1.19.0",
+    "supertest": "^4.0.2"
   }
 }

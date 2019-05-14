@@ -3,7 +3,7 @@ const {
   createRef,
   formatComments,
   renameKeys
-} = require('../db/utils');
+} = require('./utils');
 const { expect } = require('chai');
 
 describe('formatTimestamp()', () => {

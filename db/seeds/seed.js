@@ -10,7 +10,7 @@ const {
   createRef,
   formatComments,
   renameKeys
-} = require('../utils');
+} = require('../utils/utils');
 
 exports.seed = (knex, Promise) => {
   return knex.migrate
