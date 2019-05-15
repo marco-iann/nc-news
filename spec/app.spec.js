@@ -197,5 +197,10 @@ describe('/api', () => {
           expect(body.comment.votes).to.equal(17);
         });
     });
+    it('DELETE: status 204 - deletes selected comment', () => {
+      return request(app)
+        .delete('/api/comments/1')
+        .expect(204);
+    });
   });
 });

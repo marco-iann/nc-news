@@ -8,4 +8,8 @@ const updateCommentById = (id, inc_votes) => {
     .then(([comment]) => comment);
 };
 
-module.exports = { updateCommentById };
+const removeCommentById = id => {
+  return connection('comments').where({ comment_id: id });
+};
+
+module.exports = { updateCommentById, removeCommentById };
