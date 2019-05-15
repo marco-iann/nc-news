@@ -55,9 +55,21 @@ const selectCommentsByArticleId = (id, { order, sort_by }) => {
     .orderBy(sort_by || 'created_at', order || 'desc');
 };
 
+const insertCommentByArticleId = (id, { username, body }) => {
+  return connection('comments')
+    .insert({
+      author: username,
+      body,
+      article_id: id,
+      created_at: new Date(Date.now())
+    })
+    .returning('*');
+};
+
 module.exports = {
   selectArticles,
   selectArticleById,
   updateArticleById,
-  selectCommentsByArticleId
+  selectCommentsByArticleId,
+  insertCommentByArticleId
 };

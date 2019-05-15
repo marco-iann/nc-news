@@ -2,7 +2,8 @@ const {
   selectArticles,
   selectArticleById,
   updateArticleById,
-  selectCommentsByArticleId
+  selectCommentsByArticleId,
+  insertCommentByArticleId
 } = require('../models/articles');
 
 exports.getArticles = (req, res, next) => {
@@ -30,5 +31,12 @@ exports.getCommentsByArticleId = (req, res, next) => {
   const { article_id } = req.params;
   selectCommentsByArticleId(article_id, req.query).then(comments => {
     res.status(200).send({ comments });
+  });
+};
+
+exports.postCommentByArticleId = (req, res, next) => {
+  const { article_id } = req.params;
+  insertCommentByArticleId(article_id, req.body).then(([comment]) => {
+    res.status(201).send({ comment });
   });
 };

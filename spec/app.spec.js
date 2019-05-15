@@ -167,5 +167,24 @@ describe('/api', () => {
           });
         });
     });
+    it('POST: status 201 - responds with new comment', () => {
+      return request(app)
+        .post('/api/articles/9/comments')
+        .send({ username: 'rogersop', body: 'body' })
+        .expect(201)
+        .then(({ body }) => {
+          expect(body.comment).to.have.all.keys(
+            'author',
+            'body',
+            'created_at',
+            'comment_id',
+            'votes',
+            'article_id'
+          );
+          expect(body.comment.article_id).to.equal(9);
+          expect(body.comment.author).to.equal('rogersop');
+          expect(body.comment.body).to.equal('body');
+        });
+    });
   });
 });
