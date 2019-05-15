@@ -123,6 +123,8 @@ describe('/api', () => {
           expect(body.votes).to.equal(105);
         });
     });
+  });
+  describe('/articles/:article_id/comments', () => {
     it('GET: status 200 - responds with all comments from that article sorted by date (descending order)', () => {
       return request(app)
         .get('/api/articles/9/comments')
@@ -140,6 +142,17 @@ describe('/api', () => {
               'author',
               'body'
             );
+          });
+        });
+    });
+    it('GET: can sort comments by author if passed a query', () => {
+      return request(app)
+        .get('/api/articles/9/comments?sort_by=author')
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.comments).to.have.length(2);
+          expect(body.comments).to.be.sortedBy('author', {
+            descending: true
           });
         });
     });
