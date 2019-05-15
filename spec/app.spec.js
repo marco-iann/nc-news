@@ -13,6 +13,14 @@ chai.use(chaiSorted);
 describe('/api', () => {
   beforeEach(() => connection.seed.run());
   after(() => connection.destroy());
+  it('Invalid route: status 404 - returns invalid route ', () => {
+    return request(app)
+      .get('/ap')
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).to.equal('Invalid route');
+      });
+  });
   describe('/topics', () => {
     it('GET: status 200 - responds with list of topics', () => {
       return request(app)
