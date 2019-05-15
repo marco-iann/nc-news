@@ -203,4 +203,16 @@ describe('/api', () => {
         .expect(204);
     });
   });
+  describe('/users', () => {
+    it('GET: status 200 - responds with selected user', () => {
+      return request(app)
+        .get('/api/users/rogersop')
+        .expect(200)
+        .then(({ body }) => {
+          expect(body).to.have.all.keys('username', 'avatar_url', 'name');
+          expect(body.username).to.equal('rogersop');
+          expect(body.name).to.equal('paul');
+        });
+    });
+  });
 });
