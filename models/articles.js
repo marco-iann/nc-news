@@ -48,11 +48,11 @@ const updateArticleById = (id, inc_votes) => {
     .then(([article]) => article);
 };
 
-const selectCommentsByArticleId = id => {
+const selectCommentsByArticleId = (id, order) => {
   return connection('comments')
     .select('author', 'body', 'votes', 'comment_id', 'created_at')
     .where({ article_id: id })
-    .orderBy('created_at', 'desc');
+    .orderBy('created_at', order || 'desc');
 };
 
 module.exports = {
