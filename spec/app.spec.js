@@ -187,4 +187,15 @@ describe('/api', () => {
         });
     });
   });
+  describe('/comments', () => {
+    it('PATCH: status 200 - responds with updated comment', () => {
+      return request(app)
+        .patch('/api/comments/2')
+        .send({ inc_votes: 3 })
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.comment.votes).to.equal(17);
+        });
+    });
+  });
 });
