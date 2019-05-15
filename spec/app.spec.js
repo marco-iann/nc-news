@@ -123,5 +123,25 @@ describe('/api', () => {
           expect(body.votes).to.equal(105);
         });
     });
+    it('GET: status 200 - responds with all comments from that article', () => {
+      return request(app)
+        .get('/api/articles/9/comments')
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.comments).to.have.length(2);
+          expect(body.comments).to.be.sortedBy('created_at', {
+            descending: true
+          });
+          body.comments.forEach(comment => {
+            expect(comment).to.have.all.keys(
+              'comment_id',
+              'votes',
+              'created_at',
+              'author',
+              'body'
+            );
+          });
+        });
+    });
   });
 });
