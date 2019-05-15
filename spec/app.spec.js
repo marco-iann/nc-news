@@ -14,7 +14,7 @@ describe('/api', () => {
   beforeEach(() => connection.seed.run());
   after(() => connection.destroy());
   describe('/topics', () => {
-    it('GET: returns 200 and a list of topics', () => {
+    it('GET: status 200 - responds with list of topics', () => {
       return request(app)
         .get('/api/topics')
         .expect(200)
@@ -28,7 +28,7 @@ describe('/api', () => {
   });
 
   describe('/articles', () => {
-    it('GET: responds with 200 and a list of articles sorted by date in descending order by default', () => {
+    it('GET: status 200 - responds with list of article sorted by date', () => {
       return request(app)
         .get('/api/articles')
         .expect(200)
@@ -61,7 +61,7 @@ describe('/api', () => {
           });
         });
     });
-    it('GET: can sort articles by date in ascending order if passed a query', () => {
+    it('GET: can sort articles in ascending order if passed a query', () => {
       return request(app)
         .get('/api/articles?order=asc')
         .expect(200)
@@ -96,7 +96,7 @@ describe('/api', () => {
   });
 
   describe('/articles/:article_id', () => {
-    it('GET: responds with 200 and the selected article', () => {
+    it('GET: status 200 - responds with selected article', () => {
       return request(app)
         .get('/api/articles/1')
         .expect(200)
@@ -108,9 +108,19 @@ describe('/api', () => {
             'created_at',
             'votes',
             'comment_count',
-            'article_id'
+            'article_id',
+            'body'
           );
           expect(body.article_id).to.equal(1);
+        });
+    });
+    it('PATCH: status 200 - responds with updated article', () => {
+      return request(app)
+        .patch('/api/articles/1')
+        .send({ inc_votes: 5 })
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.votes).to.equal(105);
         });
     });
   });
