@@ -179,7 +179,7 @@ describe('/api', () => {
           .get('/api/articles/invalid_article_id')
           .expect(400)
           .then(({ body }) => {
-            expect(body.msg).to.equal('invalid article id');
+            expect(body.msg).to.equal('invalid id');
           });
       });
       it('GET: status 404 - responds with article not found if passed a non existing article id', () => {
@@ -205,7 +205,7 @@ describe('/api', () => {
           .send({ inc_votes: 5 })
           .expect(400)
           .then(({ body }) => {
-            expect(body.msg).to.equal('invalid article id');
+            expect(body.msg).to.equal('invalid id');
           });
       });
       it('PATCH: status 400 - responds with missing increment votes if no inc_votes on request object', () => {
@@ -271,7 +271,7 @@ describe('/api', () => {
           .get('/api/articles/not_an_article/comments')
           .expect(400)
           .then(({ body }) => {
-            expect(body.msg).to.equal('invalid article id');
+            expect(body.msg).to.equal('invalid id');
           });
       });
       it('GET: status 404 - responds with article not found if passed a non existing article', () => {
@@ -337,7 +337,7 @@ describe('/api', () => {
           .send({ username: 'rogersop', body: 'body' })
           .expect(400)
           .then(({ body }) => {
-            expect(body.msg).to.equal('invalid article id');
+            expect(body.msg).to.equal('invalid id');
           });
       });
       it('POST: status 404 - responds with article not found if passed a non existing article', () => {
@@ -378,6 +378,38 @@ describe('/api', () => {
     });
   });
   describe('/comments/:comment_id', () => {
+    it('GET: status 200 - responds with selected comment', () => {
+      return request(app)
+        .get('/api/comments/1')
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.comment).to.have.all.keys(
+            'comment_id',
+            'author',
+            'article_id',
+            'body',
+            'votes',
+            'created_at'
+          );
+          expect(body.comment.comment_id).to.eql(1);
+        });
+    });
+    it('GET: status 400 - responds with invalid comment id if passed a not valid id', () => {
+      return request(app)
+        .get('/api/comments/invalid_comment_id')
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).to.equal('invalid id');
+        });
+    });
+    it('GET: status 404 - responds with comment not found if passed a non existing comment', () => {
+      return request(app)
+        .get('/api/comments/1000')
+        .expect(404)
+        .then(({ body }) => {
+          expect(body.msg).to.equal('comment not found');
+        });
+    });
     it('PATCH: status 200 - responds with updated comment', () => {
       return request(app)
         .patch('/api/comments/2')
@@ -385,6 +417,42 @@ describe('/api', () => {
         .expect(200)
         .then(({ body }) => {
           expect(body.comment.votes).to.equal(17);
+        });
+    });
+    it('PATCH: status 400 - responds with invalid comment id if passed a not valid id', () => {
+      return request(app)
+        .patch('/api/comments/invalid_comment_id')
+        .send({ inc_votes: 5 })
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).to.equal('invalid id');
+        });
+    });
+    it('PATCH: status 400 - responds with missing increment votes if no inc_votes on request object', () => {
+      return request(app)
+        .patch('/api/comments/1')
+        .send({ not_valid: 5 })
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).to.equal('increment votes has not been sent');
+        });
+    });
+    it('PATCH: status 400 - responds with invalid inc_votes if inc_votes is invalid', () => {
+      return request(app)
+        .patch('/api/comments/1')
+        .send({ inc_votes: 'invalid' })
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).to.equal('invalid votes increment');
+        });
+    });
+    it('PATCH: status 404 - responds with comment not found if passed a non existing comment', () => {
+      return request(app)
+        .patch('/api/comments/1000')
+        .send({ inc_votes: 5 })
+        .expect(404)
+        .then(({ body }) => {
+          expect(body.msg).to.equal('comment not found');
         });
     });
     it('DELETE: status 204 - deletes selected comment', () => {
