@@ -35,6 +35,14 @@ describe('/api', () => {
           });
         });
     });
+    it('DELETE: status 405 - responds with method not allowed', () => {
+      return request(app)
+        .delete('/api/topics')
+        .expect(405)
+        .then(({ body }) => {
+          expect(body.msg).to.equal('method not allowed');
+        });
+    });
 
     xdescribe('/topics/:topic', () => {
       it('GET: status 200 - return article count for selected topic', () => {
@@ -138,6 +146,14 @@ describe('/api', () => {
           expect(body.msg).to.equal('topic not found');
         });
     });
+    it('DELETE: status 405 - responds with method not allowed', () => {
+      return request(app)
+        .delete('/api/articles')
+        .expect(405)
+        .then(({ body }) => {
+          expect(body.msg).to.equal('method not allowed');
+        });
+    });
 
     describe('/articles/:article_id', () => {
       it('GET: status 200 - responds with selected article', () => {
@@ -219,6 +235,14 @@ describe('/api', () => {
             expect(body.msg).to.equal('article not found');
           });
       });
+      it('PUT: status 405 - responds with method not allowed', () => {
+        return request(app)
+          .put('/api/articles/1')
+          .expect(405)
+          .then(({ body }) => {
+            expect(body.msg).to.equal('method not allowed');
+          });
+      });
     });
 
     describe('/articles/:article_id/comments', () => {
@@ -283,6 +307,14 @@ describe('/api', () => {
             expect(body.comment.body).to.equal('body');
           });
       });
+      it('PUT: status 405 - responds with method not allowed', () => {
+        return request(app)
+          .put('/api/articles/1/comments')
+          .expect(405)
+          .then(({ body }) => {
+            expect(body.msg).to.equal('method not allowed');
+          });
+      });
     });
   });
   describe('/comments/:comment_id', () => {
@@ -300,6 +332,14 @@ describe('/api', () => {
         .delete('/api/comments/1')
         .expect(204);
     });
+    it('PUT: status 405 - responds with method not allowed', () => {
+      return request(app)
+        .put('/api/comments/5')
+        .expect(405)
+        .then(({ body }) => {
+          expect(body.msg).to.equal('method not allowed');
+        });
+    });
   });
   describe('/users/:username', () => {
     it('GET: status 200 - responds with selected user', () => {
@@ -310,6 +350,14 @@ describe('/api', () => {
           expect(body).to.have.all.keys('username', 'avatar_url', 'name');
           expect(body.username).to.equal('rogersop');
           expect(body.name).to.equal('paul');
+        });
+    });
+    it('PUT: status 405 - responds with method not allowed', () => {
+      return request(app)
+        .put('/api/users/rogersop')
+        .expect(405)
+        .then(({ body }) => {
+          expect(body.msg).to.equal('method not allowed');
         });
     });
   });

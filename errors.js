@@ -1,3 +1,7 @@
+exports.methodNotAllowed = (req, res) => {
+  res.status(405).send({ msg: 'method not allowed' });
+};
+
 exports.handle400 = (err, req, res, next) => {
   // console.log(err);
   const codes = {
