@@ -6,3 +6,10 @@ exports.selectTopics = () => {
     .from('topics')
     .returning('*');
 };
+
+exports.selectTopicBySlug = slug => {
+  return connection('topics')
+    .select('*')
+    .where({ slug })
+    .first();
+};

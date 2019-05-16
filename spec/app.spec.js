@@ -44,13 +44,21 @@ describe('/api', () => {
         });
     });
 
-    xdescribe('/topics/:topic', () => {
-      it('GET: status 200 - return article count for selected topic', () => {
+    describe('/topics/:slug', () => {
+      it('GET: status 200 - responds with topic if it exists', () => {
         return request(app)
           .get('/api/topics/mitch')
           .expect(200)
           .then(({ body }) => {
-            expect(body.articlesCount).to.equal(11);
+            expect(body.topic.slug).to.equal('mitch');
+          });
+      });
+      it('GET: status 404 - responds with topic not found if non existing topic', () => {
+        return request(app)
+          .get('/api/topics/non_existing_topic')
+          .expect(404)
+          .then(({ body }) => {
+            expect(body.msg).to.equal('topic not found');
           });
       });
     });
