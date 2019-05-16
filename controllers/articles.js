@@ -66,7 +66,11 @@ exports.getCommentsByArticleId = (req, res, next) => {
 
 exports.postCommentByArticleId = (req, res, next) => {
   const { article_id } = req.params;
-  insertCommentByArticleId(article_id, req.body).then(([comment]) => {
-    res.status(201).send({ comment });
-  });
+  if (!req.body.username || !req.body.body)
+    next({ code: 400, msg: 'invalid post body' });
+  insertCommentByArticleId(article_id, req.body)
+    .then(([comment]) => {
+      res.status(201).send({ comment });
+    })
+    .catch(next);
 };

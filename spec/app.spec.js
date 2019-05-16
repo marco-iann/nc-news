@@ -331,6 +331,42 @@ describe('/api', () => {
             expect(body.comment.body).to.equal('body');
           });
       });
+      it('POST: status 400 - responds with invalid article if passed a non valid article', () => {
+        return request(app)
+          .get('/api/articles/not_an_article/comments')
+          .send({ username: 'rogersop', body: 'body' })
+          .expect(400)
+          .then(({ body }) => {
+            expect(body.msg).to.equal('invalid article id');
+          });
+      });
+      it('POST: status 404 - responds with article not found if passed a non existing article', () => {
+        return request(app)
+          .get('/api/articles/9999/comments')
+          .send({ username: 'rogersop', body: 'body' })
+          .expect(404)
+          .then(({ body }) => {
+            expect(body.msg).to.equal('article not found');
+          });
+      });
+      it('POST: status 400 - responds with username does not exist if passed a non existing username', () => {
+        return request(app)
+          .post('/api/articles/9/comments')
+          .send({ username: 'non existing username', body: 'body' })
+          .expect(400)
+          .then(({ body }) => {
+            expect(body.msg).to.equal('author does not exist');
+          });
+      });
+      it('POST: status 400 - responds with invalid post body if passed a non post object', () => {
+        return request(app)
+          .post('/api/articles/9/comments')
+          .send({ username: 'rogersop', invalid_body: 'body' })
+          .expect(400)
+          .then(({ body }) => {
+            expect(body.msg).to.equal('invalid post body');
+          });
+      });
       it('PUT: status 405 - responds with method not allowed', () => {
         return request(app)
           .put('/api/articles/1/comments')
