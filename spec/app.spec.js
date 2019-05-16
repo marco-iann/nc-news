@@ -460,6 +460,24 @@ describe('/api', () => {
         .delete('/api/comments/1')
         .expect(204);
     });
+    it('DELETE: status 400 - responds with invalid comment id if passed a not valid id', () => {
+      return request(app)
+        .delete('/api/comments/invalid_comment_id')
+        .send({ inc_votes: 5 })
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).to.equal('invalid id');
+        });
+    });
+    it('DELETE: status 404 - responds with comment not found if passed a non existing comment', () => {
+      return request(app)
+        .delete('/api/comments/1000')
+        .send({ inc_votes: 5 })
+        .expect(404)
+        .then(({ body }) => {
+          expect(body.msg).to.equal('comment not found');
+        });
+    });
     it('PUT: status 405 - responds with method not allowed', () => {
       return request(app)
         .put('/api/comments/5')
