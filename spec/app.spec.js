@@ -183,7 +183,44 @@ describe('/api', () => {
             expect(body.votes).to.equal(105);
           });
       });
+      it('PATCH: status 400 - responds with invalid article id if passed a not valid id', () => {
+        return request(app)
+          .patch('/api/articles/invalid_article_id')
+          .send({ inc_votes: 5 })
+          .expect(400)
+          .then(({ body }) => {
+            expect(body.msg).to.equal('invalid article id');
+          });
+      });
+      it('PATCH: status 400 - responds with missing increment votes if no inc_votes on request object', () => {
+        return request(app)
+          .patch('/api/articles/1')
+          .send({ not_valid: 5 })
+          .expect(400)
+          .then(({ body }) => {
+            expect(body.msg).to.equal('increment votes has not been sent');
+          });
+      });
+      it('PATCH: status 400 - responds with invalid inc_votes if inc_votes is invalid', () => {
+        return request(app)
+          .patch('/api/articles/1')
+          .send({ inc_votes: 'invalid' })
+          .expect(400)
+          .then(({ body }) => {
+            expect(body.msg).to.equal('invalid votes increment');
+          });
+      });
+      it('PATCH: status 404 - responds with article not found if passed a non existing article', () => {
+        return request(app)
+          .patch('/api/articles/1000')
+          .send({ inc_votes: 5 })
+          .expect(404)
+          .then(({ body }) => {
+            expect(body.msg).to.equal('article not found');
+          });
+      });
     });
+
     describe('/articles/:article_id/comments', () => {
       it('GET: status 200 - responds with all comments from that article sorted by date (descending order)', () => {
         return request(app)

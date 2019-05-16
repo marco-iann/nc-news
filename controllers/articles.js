@@ -38,9 +38,16 @@ exports.getArticleById = (req, res, next) => {
 exports.patchArticleById = (req, res, next) => {
   const { article_id } = req.params;
   const { inc_votes } = req.body;
-  updateArticleById(article_id, inc_votes).then(article => {
-    res.status(200).send(article);
-  });
+  if (!inc_votes) next({ code: 400, msg: 'increment votes has not been sent' });
+  if (typeof inc_votes !== 'number')
+    next({ code: 400, msg: 'invalid votes increment' });
+  updateArticleById(article_id, inc_votes)
+    .then(article => {
+      if (!article)
+        return Promise.reject({ code: 404, msg: 'article not found' });
+      res.status(200).send(article);
+    })
+    .catch(next);
 };
 
 exports.getCommentsByArticleId = (req, res, next) => {

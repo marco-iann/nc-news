@@ -1,4 +1,5 @@
 exports.handle400 = (err, req, res, next) => {
+  // console.log(err);
   const codes = {
     400: 'bad request',
     '42703': 'invalid query',
