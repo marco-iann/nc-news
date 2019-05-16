@@ -6,10 +6,20 @@ const {
   insertCommentByArticleId
 } = require('../models/articles');
 
+const { selectUserByUsername } = require('../models/users');
+
 exports.getArticles = (req, res, next) => {
-  selectArticles(req.query).then(articles => {
-    res.status(200).send({ articles });
-  });
+  const { author, topic } = req.query;
+  if (author) {
+    selectUserByUsername(author).then(author => {
+      if (!author) res.status(404).send({ msg: 'author not found' });
+    });
+  }
+  selectArticles(req.query)
+    .then(articles => {
+      res.status(200).send({ articles });
+    })
+    .catch(next);
 };
 
 exports.getArticleById = (req, res, next) => {

@@ -1,6 +1,7 @@
 const connection = require('../db/connection');
 
 const selectArticles = ({ sort_by, order, author, topic }) => {
+  if (order !== 'asc' && order !== 'desc') order = 'desc';
   return connection
     .select(
       'articles.author',

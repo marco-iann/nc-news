@@ -1,10 +1,10 @@
 const connection = require('../db/connection');
 
-const selectUsers = username => {
+const selectUserByUsername = username => {
   return connection('users')
     .select('*')
     .where({ username })
     .first();
 };
 
-module.exports = { selectUsers };
+module.exports = { selectUserByUsername };
