@@ -7,15 +7,18 @@ const {
 } = require('../models/articles');
 
 const { selectUserByUsername } = require('../models/users');
+const { selectTopicBySlug } = require('../models/topics');
 
 exports.getArticles = (req, res, next) => {
   const { author, topic } = req.query;
-  // TODO handle topic query in the same way
   const authorPromise = req.query.author ? selectUserByUsername(author) : null;
-  Promise.all([authorPromise])
-    .then(([author]) => {
+  const topicPromise = req.query.topic ? selectTopicBySlug(topic) : null;
+  Promise.all([authorPromise, topicPromise])
+    .then(([author, topic]) => {
       if (!author && req.query.author)
         return Promise.reject({ code: 404, msg: 'author not found' });
+      if (!topic && req.query.topic)
+        return Promise.reject({ code: 404, msg: 'topic not found' });
       else return selectArticles(req.query);
     })
     .then(articles => {

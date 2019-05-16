@@ -146,7 +146,7 @@ describe('/api', () => {
           expect(body.msg).to.equal('author not found');
         });
     });
-    xit('GET: status 404 - responds with topic not found if passed an non existing topic as query', () => {
+    it('GET: status 404 - responds with topic not found if passed an non existing topic as query', () => {
       return request(app)
         .get('/api/articles?topic=non_existing_topic')
         .expect(404)
