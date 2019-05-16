@@ -266,6 +266,22 @@ describe('/api', () => {
             });
           });
       });
+      it('GET: status 400 - responds with invalid article if passed a non valid article', () => {
+        return request(app)
+          .get('/api/articles/not_an_article/comments')
+          .expect(400)
+          .then(({ body }) => {
+            expect(body.msg).to.equal('invalid article id');
+          });
+      });
+      it('GET: status 404 - responds with article not found if passed a non existing article', () => {
+        return request(app)
+          .get('/api/articles/9999/comments')
+          .expect(404)
+          .then(({ body }) => {
+            expect(body.msg).to.equal('article not found');
+          });
+      });
       it('GET: can sort comments by author if passed a query', () => {
         return request(app)
           .get('/api/articles/9/comments?sort_by=author')
@@ -286,6 +302,14 @@ describe('/api', () => {
             expect(body.comments).to.be.sortedBy('created_at', {
               ascending: true
             });
+          });
+      });
+      it('GET: status 400 - responds with invalid query if passed an invalid sort_by column as query', () => {
+        return request(app)
+          .get('/api/articles?sort_by=abc')
+          .expect(400)
+          .then(({ body }) => {
+            expect(body.msg).to.equal('invalid query');
           });
       });
       it('POST: status 201 - responds with new comment', () => {
