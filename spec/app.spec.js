@@ -498,6 +498,12 @@ describe('/api', () => {
           expect(body.name).to.equal('paul');
         });
     });
+    it('GET: status 404 - responds with username not found if non existing username', () => {
+      return request(app)
+        .get('/api/users/non_existing_username')
+        .expect(404)
+        .then(({ body }) => [expect(body.msg).to.equal('username not found')]);
+    });
     it('PUT: status 405 - responds with method not allowed', () => {
       return request(app)
         .put('/api/users/rogersop')
