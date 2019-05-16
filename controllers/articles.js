@@ -10,13 +10,14 @@ const { selectUserByUsername } = require('../models/users');
 
 exports.getArticles = (req, res, next) => {
   const { author, topic } = req.query;
-  if (author) {
-    selectUserByUsername(author).then(author => {
-      if (!author) res.status(404).send({ msg: 'author not found' });
-    });
-  }
-  // TODO handling error message when searching for non existing topic
-  selectArticles(req.query)
+  // TODO handle topic query in the same way
+  const authorPromise = req.query.author ? selectUserByUsername(author) : null;
+  Promise.all([authorPromise])
+    .then(([author]) => {
+      if (!author && req.query.author)
+        return Promise.reject({ code: 400, msg: 'author not found' });
+      else return selectArticles(req.query);
+    })
     .then(articles => {
       res.status(200).send({ articles });
     })
@@ -27,7 +28,9 @@ exports.getArticleById = (req, res, next) => {
   const { article_id } = req.params;
   selectArticleById(article_id)
     .then(article => {
-      res.status(200).send(article);
+      if (!article)
+        return Promise.reject({ code: 404, msg: 'article not found' });
+      else res.status(200).send(article);
     })
     .catch(next);
 };

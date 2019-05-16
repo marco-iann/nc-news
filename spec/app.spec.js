@@ -166,6 +166,14 @@ describe('/api', () => {
             expect(body.msg).to.equal('invalid article id');
           });
       });
+      it('GET: status 404 - responds with article not found if passed a non existing article id', () => {
+        return request(app)
+          .get('/api/articles/1000')
+          .expect(404)
+          .then(({ body }) => {
+            expect(body.msg).to.equal('article not found');
+          });
+      });
       it('PATCH: status 200 - responds with updated article', () => {
         return request(app)
           .patch('/api/articles/1')
@@ -239,33 +247,33 @@ describe('/api', () => {
           });
       });
     });
-    describe('/comments/:comment_id', () => {
-      it('PATCH: status 200 - responds with updated comment', () => {
-        return request(app)
-          .patch('/api/comments/2')
-          .send({ inc_votes: 3 })
-          .expect(200)
-          .then(({ body }) => {
-            expect(body.comment.votes).to.equal(17);
-          });
-      });
-      it('DELETE: status 204 - deletes selected comment', () => {
-        return request(app)
-          .delete('/api/comments/1')
-          .expect(204);
-      });
+  });
+  describe('/comments/:comment_id', () => {
+    it('PATCH: status 200 - responds with updated comment', () => {
+      return request(app)
+        .patch('/api/comments/2')
+        .send({ inc_votes: 3 })
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.comment.votes).to.equal(17);
+        });
     });
-    describe('/users/:username', () => {
-      it('GET: status 200 - responds with selected user', () => {
-        return request(app)
-          .get('/api/users/rogersop')
-          .expect(200)
-          .then(({ body }) => {
-            expect(body).to.have.all.keys('username', 'avatar_url', 'name');
-            expect(body.username).to.equal('rogersop');
-            expect(body.name).to.equal('paul');
-          });
-      });
+    it('DELETE: status 204 - deletes selected comment', () => {
+      return request(app)
+        .delete('/api/comments/1')
+        .expect(204);
+    });
+  });
+  describe('/users/:username', () => {
+    it('GET: status 200 - responds with selected user', () => {
+      return request(app)
+        .get('/api/users/rogersop')
+        .expect(200)
+        .then(({ body }) => {
+          expect(body).to.have.all.keys('username', 'avatar_url', 'name');
+          expect(body.username).to.equal('rogersop');
+          expect(body.name).to.equal('paul');
+        });
     });
   });
 });
