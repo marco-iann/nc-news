@@ -15,7 +15,7 @@ exports.getArticles = (req, res, next) => {
   Promise.all([authorPromise])
     .then(([author]) => {
       if (!author && req.query.author)
-        return Promise.reject({ code: 400, msg: 'author not found' });
+        return Promise.reject({ code: 404, msg: 'author not found' });
       else return selectArticles(req.query);
     })
     .then(articles => {
