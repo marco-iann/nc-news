@@ -35,6 +35,17 @@ describe('/api', () => {
           });
         });
     });
+
+    xdescribe('/topics/:topic', () => {
+      it('GET: status 200 - return article count for selected topic', () => {
+        return request(app)
+          .get('/api/topics/mitch')
+          .expect(200)
+          .then(({ body }) => {
+            expect(body.articlesCount).to.equal(11);
+          });
+      });
+    });
   });
 
   describe('/articles', () => {
@@ -145,6 +156,14 @@ describe('/api', () => {
               'body'
             );
             expect(body.article_id).to.equal(1);
+          });
+      });
+      it('GET: status 400 - responds with invalid article id if passed a not valid id', () => {
+        return request(app)
+          .get('/api/articles/invalid_article_id')
+          .expect(400)
+          .then(({ body }) => {
+            expect(body.msg).to.equal('invalid article id');
           });
       });
       it('PATCH: status 200 - responds with updated article', () => {

@@ -15,6 +15,7 @@ exports.getArticles = (req, res, next) => {
       if (!author) res.status(404).send({ msg: 'author not found' });
     });
   }
+  // TODO handling error message when searching for non existing topic
   selectArticles(req.query)
     .then(articles => {
       res.status(200).send({ articles });
@@ -24,9 +25,11 @@ exports.getArticles = (req, res, next) => {
 
 exports.getArticleById = (req, res, next) => {
   const { article_id } = req.params;
-  selectArticleById(article_id).then(article => {
-    res.status(200).send(article);
-  });
+  selectArticleById(article_id)
+    .then(article => {
+      res.status(200).send(article);
+    })
+    .catch(next);
 };
 
 exports.patchArticleById = (req, res, next) => {
