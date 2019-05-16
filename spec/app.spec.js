@@ -65,7 +65,7 @@ describe('/api', () => {
   });
 
   describe('/articles', () => {
-    it('GET: status 200 - responds with list of article sorted by date - defaults to descending order', () => {
+    it('GET: status 200 - responds with list of article sorted by date - defaults to descending order and limit 10', () => {
       return request(app)
         .get('/api/articles')
         .expect(200)
@@ -73,7 +73,8 @@ describe('/api', () => {
           expect(body.articles).to.be.sortedBy('created_at', {
             descending: true
           });
-          expect(body.articles).to.have.length(12);
+          // number of articles is limited by default pagination limit
+          expect(body.articles).to.have.length(10);
           expect(body.articles[0].comment_count).to.equal('13');
           body.articles.forEach(article => {
             expect(article).to.have.all.keys(
@@ -88,6 +89,14 @@ describe('/api', () => {
           });
         });
     });
+    it('GET: can change the number of articles in the response if passed a limit query', () => {
+      return request(app)
+        .get('/api/articles?limit=5')
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.articles).to.have.length(5);
+        });
+    });
     it('GET: can sort articles by topic if passed a query - defaults to descending order', () => {
       return request(app)
         .get('/api/articles?sort_by=topic')
@@ -96,6 +105,14 @@ describe('/api', () => {
           expect(body.articles).to.be.sortedBy('topic', {
             descending: true
           });
+        });
+    });
+    it('GET: can offset results if passed a page as query', () => {
+      return request(app)
+        .get('/api/articles?p=2')
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.articles[0].article_id).to.equal(11);
         });
     });
     it('GET: can sort articles in ascending order if passed a query', () => {
@@ -124,7 +141,8 @@ describe('/api', () => {
         .get('/api/articles?topic=mitch')
         .expect(200)
         .then(({ body }) => {
-          expect(body.articles).to.have.length(11);
+          // number of articles is limited by default pagination limit
+          expect(body.articles).to.have.length(10);
           body.articles.forEach(article => {
             expect(article.topic).to.eql('mitch');
           });

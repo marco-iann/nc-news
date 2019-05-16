@@ -1,6 +1,13 @@
 const connection = require('../db/connection');
 
-const selectArticles = ({ sort_by, order, author, topic }) => {
+const selectArticles = ({
+  sort_by,
+  order,
+  author,
+  topic,
+  limit = 10,
+  p = 1
+}) => {
   if (order !== 'asc' && order !== 'desc') order = 'desc';
   return connection
     .select(
@@ -15,7 +22,9 @@ const selectArticles = ({ sort_by, order, author, topic }) => {
     .modify(query => {
       if (author) query.where({ 'articles.author': author });
       if (topic) query.where({ 'articles.topic': topic });
+      if (p) query.offset((p - 1) * limit);
     })
+    .limit(limit)
     .count({ comment_count: 'comment_id' })
     .leftJoin('comments', 'articles.article_id', '=', 'comments.article_id')
     .groupBy('articles.article_id')
