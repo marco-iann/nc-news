@@ -57,14 +57,14 @@ exports.patchArticleById = (req, res, next) => {
 
 exports.getCommentsByArticleId = (req, res, next) => {
   const { article_id } = req.params;
-  selectArticleById(article_id)
-    .then(article => {
+  Promise.all([
+    selectArticleById(article_id),
+    selectCommentsByArticleId(article_id, req.query)
+  ])
+    .then(([article, comments]) => {
       if (!article)
         return Promise.reject({ code: 404, msg: 'article not found' });
-      else return selectCommentsByArticleId(article_id, req.query);
-    })
-    .then(comments => {
-      res.status(200).send({ comments });
+      else res.status(200).send({ comments });
     })
     .catch(next);
 };
