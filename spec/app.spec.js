@@ -218,7 +218,7 @@ describe('/api', () => {
           .get('/api/articles/1')
           .expect(200)
           .then(({ body }) => {
-            expect(body).to.have.all.keys(
+            expect(body.article).to.have.all.keys(
               'author',
               'title',
               'topic',
@@ -228,7 +228,7 @@ describe('/api', () => {
               'article_id',
               'body'
             );
-            expect(body.article_id).to.equal(1);
+            expect(body.article.article_id).to.equal(1);
           });
       });
       it('GET: status 400 - responds with invalid article id if passed a not valid id', () => {
@@ -253,7 +253,7 @@ describe('/api', () => {
           .send({ inc_votes: 5 })
           .expect(200)
           .then(({ body }) => {
-            expect(body.votes).to.equal(105);
+            expect(body.article.votes).to.equal(105);
           });
       });
       it('PATCH: status 400 - responds with invalid article id if passed a not valid id', () => {
@@ -265,13 +265,13 @@ describe('/api', () => {
             expect(body.msg).to.equal('invalid id');
           });
       });
-      it('PATCH: status 400 - responds with missing increment votes if no inc_votes on request object', () => {
+      it('PATCH: status 200 - responds with the unchanged article if inc_votes missing on the request body', () => {
         return request(app)
           .patch('/api/articles/1')
           .send({ not_valid: 5 })
-          .expect(400)
+          .expect(200)
           .then(({ body }) => {
-            expect(body.msg).to.equal('increment votes has not been sent');
+            expect(body.article.votes).to.equal(100);
           });
       });
       it('PATCH: status 400 - responds with invalid inc_votes if inc_votes is invalid', () => {
@@ -407,7 +407,7 @@ describe('/api', () => {
       });
       it('POST: status 400 - responds with invalid article if passed a non valid article', () => {
         return request(app)
-          .get('/api/articles/not_an_article/comments')
+          .post('/api/articles/not_an_article/comments')
           .send({ username: 'rogersop', body: 'body' })
           .expect(400)
           .then(({ body }) => {
@@ -416,7 +416,7 @@ describe('/api', () => {
       });
       it('POST: status 404 - responds with article not found if passed a non existing article', () => {
         return request(app)
-          .get('/api/articles/9999/comments')
+          .post('/api/articles/9999/comments')
           .send({ username: 'rogersop', body: 'body' })
           .expect(404)
           .then(({ body }) => {
@@ -502,13 +502,13 @@ describe('/api', () => {
           expect(body.msg).to.equal('invalid id');
         });
     });
-    it('PATCH: status 400 - responds with missing increment votes if no inc_votes on request object', () => {
+    it('PATCH: status 200 - responds with unmodified comment if inc_votes is not specified', () => {
       return request(app)
         .patch('/api/comments/1')
         .send({ not_valid: 5 })
-        .expect(400)
+        .expect(200)
         .then(({ body }) => {
-          expect(body.msg).to.equal('increment votes has not been sent');
+          expect(body.comment.votes).to.equal(16);
         });
     });
     it('PATCH: status 400 - responds with invalid inc_votes if inc_votes is invalid', () => {
@@ -567,9 +567,9 @@ describe('/api', () => {
         .get('/api/users/rogersop')
         .expect(200)
         .then(({ body }) => {
-          expect(body).to.have.all.keys('username', 'avatar_url', 'name');
-          expect(body.username).to.equal('rogersop');
-          expect(body.name).to.equal('paul');
+          expect(body.user).to.have.all.keys('username', 'avatar_url', 'name');
+          expect(body.user.username).to.equal('rogersop');
+          expect(body.user.name).to.equal('paul');
         });
     });
     it('GET: status 404 - responds with username not found if non existing username', () => {

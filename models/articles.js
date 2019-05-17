@@ -11,8 +11,8 @@ const countArticles = ({ author, topic }) => {
 };
 
 const selectArticles = ({
-  sort_by,
-  order,
+  sort_by = 'created_at',
+  order = 'desc',
   author,
   topic,
   limit = 10,
@@ -38,7 +38,7 @@ const selectArticles = ({
     .count({ comment_count: 'comment_id' })
     .leftJoin('comments', 'articles.article_id', '=', 'comments.article_id')
     .groupBy('articles.article_id')
-    .orderBy(sort_by || 'created_at', order || 'desc');
+    .orderBy(sort_by, order);
 };
 
 const selectArticleById = id => {
@@ -63,14 +63,16 @@ const selectArticleById = id => {
 const updateArticleById = (id, inc_votes) => {
   return connection('articles')
     .where({ article_id: id })
-    .increment('votes', inc_votes)
+    .modify(query => {
+      if (inc_votes) query.increment('votes', inc_votes);
+    })
     .returning('*')
     .then(([article]) => article);
 };
 
 const selectCommentsByArticleId = (
   id,
-  { order, sort_by, limit = 10, p = 1 }
+  { order = 'desc', sort_by = 'created_at', limit = 10, p = 1 }
 ) => {
   return connection('comments')
     .select('author', 'body', 'votes', 'comment_id', 'created_at')
@@ -79,7 +81,7 @@ const selectCommentsByArticleId = (
       if (p) query.offset((p - 1) * limit);
     })
     .where({ article_id: id })
-    .orderBy(sort_by || 'created_at', order || 'desc');
+    .orderBy(sort_by, order);
 };
 
 const insertCommentByArticleId = (id, { username, body }) => {

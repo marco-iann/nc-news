@@ -10,7 +10,9 @@ const selectCommentById = id => {
 const updateCommentById = (id, inc_votes) => {
   return connection('comments')
     .where({ comment_id: id })
-    .increment('votes', inc_votes)
+    .modify(query => {
+      if (inc_votes) query.increment('votes', inc_votes);
+    })
     .returning('*')
     .then(([comment]) => comment);
 };

@@ -18,8 +18,7 @@ exports.getCommentById = (req, res, next) => {
 exports.patchCommentById = (req, res, next) => {
   const { comment_id } = req.params;
   const { inc_votes } = req.body;
-  if (!inc_votes) next({ code: 400, msg: 'increment votes has not been sent' });
-  if (typeof inc_votes !== 'number')
+  if (inc_votes && typeof inc_votes !== 'number')
     next({ code: 400, msg: 'invalid votes increment' });
   selectCommentById();
   updateCommentById(comment_id, inc_votes)

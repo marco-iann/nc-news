@@ -38,7 +38,7 @@ exports.getArticleById = (req, res, next) => {
     .then(article => {
       if (!article)
         return Promise.reject({ code: 404, msg: 'article not found' });
-      else res.status(200).send(article);
+      else res.status(200).send({ article });
     })
     .catch(next);
 };
@@ -46,14 +46,13 @@ exports.getArticleById = (req, res, next) => {
 exports.patchArticleById = (req, res, next) => {
   const { article_id } = req.params;
   const { inc_votes } = req.body;
-  if (!inc_votes) next({ code: 400, msg: 'increment votes has not been sent' });
-  if (typeof inc_votes !== 'number')
+  if (inc_votes && typeof inc_votes !== 'number')
     next({ code: 400, msg: 'invalid votes increment' });
   updateArticleById(article_id, inc_votes)
     .then(article => {
       if (!article)
         return Promise.reject({ code: 404, msg: 'article not found' });
-      res.status(200).send(article);
+      res.status(200).send({ article });
     })
     .catch(next);
 };
@@ -76,7 +75,12 @@ exports.postCommentByArticleId = (req, res, next) => {
   const { article_id } = req.params;
   if (!req.body.username || !req.body.body)
     next({ code: 400, msg: 'invalid post body' });
-  insertCommentByArticleId(article_id, req.body)
+  selectArticleById(article_id)
+    .then(article => {
+      if (!article)
+        return Promise.reject({ code: 404, msg: 'article not found' });
+      else return insertCommentByArticleId(article_id, req.body);
+    })
     .then(([comment]) => {
       res.status(201).send({ comment });
     })

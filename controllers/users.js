@@ -6,7 +6,7 @@ exports.getUserByUsername = (req, res, next) => {
     .then(user => {
       if (!user)
         return Promise.reject({ code: 404, msg: 'username not found' });
-      res.status(200).send(user);
+      res.status(200).send({ user });
     })
     .catch(next);
 };
