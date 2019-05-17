@@ -14,20 +14,18 @@ exports.getArticles = (req, res, next) => {
   const { author, topic } = req.query;
   const authorPromise = req.query.author ? selectUserByUsername(author) : null;
   const topicPromise = req.query.topic ? selectTopicBySlug(topic) : null;
-  Promise.all([authorPromise, topicPromise])
-    .then(([author, topic]) => {
+  Promise.all([
+    authorPromise,
+    topicPromise,
+    selectArticles(req.query),
+    countArticles(req.query)
+  ])
+    .then(([author, topic, articles, articles_count]) => {
       if (!author && req.query.author)
         return Promise.reject({ code: 404, msg: 'author not found' });
-      if (!topic && req.query.topic)
+      else if (!topic && req.query.topic)
         return Promise.reject({ code: 404, msg: 'topic not found' });
-      else
-        return Promise.all([
-          selectArticles(req.query),
-          countArticles(req.query)
-        ]);
-    })
-    .then(([articles, articles_count]) => {
-      res.status(200).send({ articles_count, articles });
+      else res.status(200).send({ articles_count, articles });
     })
     .catch(next);
 };
