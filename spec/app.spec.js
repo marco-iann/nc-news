@@ -285,10 +285,11 @@ describe('/api', () => {
     describe('/articles/:article_id/comments', () => {
       it('GET: status 200 - responds with all comments from that article sorted by date (descending order)', () => {
         return request(app)
-          .get('/api/articles/9/comments')
+          .get('/api/articles/1/comments')
           .expect(200)
           .then(({ body }) => {
-            expect(body.comments).to.have.length(2);
+            // number of comments is limited by default pagination limit
+            expect(body.comments).to.have.length(10);
             expect(body.comments).to.be.sortedBy('created_at', {
               descending: true
             });
@@ -301,6 +302,22 @@ describe('/api', () => {
                 'body'
               );
             });
+          });
+      });
+      it('GET: can change results limit passing limit query', () => {
+        return request(app)
+          .get('/api/articles/1/comments?limit=5')
+          .expect(200)
+          .then(({ body }) => {
+            expect(body.comments).to.have.length(5);
+          });
+      });
+      it('GET: can offset results if passed a page as query', () => {
+        return request(app)
+          .get('/api/articles/1/comments?p=2')
+          .expect(200)
+          .then(({ body }) => {
+            expect(body.comments[0].comment_id).to.equal(12);
           });
       });
       it('GET: status 400 - responds with invalid article if passed a non valid article', () => {

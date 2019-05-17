@@ -68,9 +68,16 @@ const updateArticleById = (id, inc_votes) => {
     .then(([article]) => article);
 };
 
-const selectCommentsByArticleId = (id, { order, sort_by }) => {
+const selectCommentsByArticleId = (
+  id,
+  { order, sort_by, limit = 10, p = 1 }
+) => {
   return connection('comments')
     .select('author', 'body', 'votes', 'comment_id', 'created_at')
+    .limit(limit)
+    .modify(query => {
+      if (p) query.offset((p - 1) * limit);
+    })
     .where({ article_id: id })
     .orderBy(sort_by || 'created_at', order || 'desc');
 };
