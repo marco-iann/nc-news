@@ -8,6 +8,8 @@ const chaiSorted = require('chai-sorted');
 const app = require('../app');
 const connection = require('../db/connection');
 
+const { countArticles } = require('../models/articles');
+
 chai.use(chaiSorted);
 
 describe('/api', () => {
@@ -65,6 +67,14 @@ describe('/api', () => {
   });
 
   describe('/articles', () => {
+    describe('countArticles()', () => {
+      it('counts the number of articles given certain filters', () => {
+        countArticles({ author: 'icellusedkars' }).then(count =>
+          expect(count).to.equal(6)
+        );
+      });
+    });
+
     it('GET: status 200 - responds with list of article sorted by date - defaults to descending order and limit 10', () => {
       return request(app)
         .get('/api/articles')

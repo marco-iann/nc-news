@@ -1,5 +1,15 @@
 const connection = require('../db/connection');
 
+const countArticles = ({ author, topic }) => {
+  return connection('articles')
+    .select('*')
+    .modify(query => {
+      if (author) query.where({ 'articles.author': author });
+      if (topic) query.where({ 'articles.topic': topic });
+    })
+    .then(articles => articles.length);
+};
+
 const selectArticles = ({
   sort_by,
   order,
@@ -77,6 +87,7 @@ const insertCommentByArticleId = (id, { username, body }) => {
 };
 
 module.exports = {
+  countArticles,
   selectArticles,
   selectArticleById,
   updateArticleById,
