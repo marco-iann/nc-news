@@ -16,6 +16,26 @@ describe('/api', () => {
   beforeEach(() => connection.seed.run());
   after(() => connection.destroy());
 
+  it('GET: status 200 - responds with an list of endpoints with usage examples', () => {
+    return request(app)
+      .get('/api')
+      .expect(200)
+      .then(({ body }) => {
+        expect(body).to.eql({
+          msg: 'this is a list of endpoints with usage examples'
+        });
+      });
+  });
+
+  it('POST: stratus 405 - responds with method not allowed for any other method on /api endpoint', () => {
+    return request(app)
+      .post('/api')
+      .expect(405)
+      .then(({ body }) => {
+        expect(body.msg).to.equal('method not allowed');
+      });
+  });
+
   it('Invalid route: status 404 - returns invalid route ', () => {
     return request(app)
       .get('/notavalidroute')
