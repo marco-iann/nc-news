@@ -87,8 +87,7 @@ const insertCommentByArticleId = (id, { username, body }) => {
     .insert({
       author: username,
       body,
-      article_id: id,
-      created_at: new Date(Date.now())
+      article_id: id
     })
     .returning('*');
 };
