@@ -85,6 +85,7 @@ describe('/api', () => {
           });
           // number of articles is limited by default pagination limit
           expect(body.articles).to.have.length(10);
+          expect(body.articles_count).to.equal(12);
           expect(body.articles[0].comment_count).to.equal('13');
           body.articles.forEach(article => {
             expect(article).to.have.all.keys(

@@ -1,4 +1,5 @@
 const {
+  countArticles,
   selectArticles,
   selectArticleById,
   updateArticleById,
@@ -19,10 +20,14 @@ exports.getArticles = (req, res, next) => {
         return Promise.reject({ code: 404, msg: 'author not found' });
       if (!topic && req.query.topic)
         return Promise.reject({ code: 404, msg: 'topic not found' });
-      else return selectArticles(req.query);
+      else
+        return Promise.all([
+          selectArticles(req.query),
+          countArticles(req.query)
+        ]);
     })
-    .then(articles => {
-      res.status(200).send({ articles });
+    .then(([articles, articles_count]) => {
+      res.status(200).send({ articles_count, articles });
     })
     .catch(next);
 };
