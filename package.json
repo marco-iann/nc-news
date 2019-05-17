@@ -4,6 +4,7 @@
   "description": "",
   "main": "knexfile.js",
   "scripts": {
+    "start": "node listen.js",
     "test": "mocha spec/*.spec.js",
     "test-utils": "mocha --watch ./db/utils/utils.spec.js",
     "setup-db": "psql -f ./db/setup.sql",
@@ -13,7 +14,10 @@
     "migrate-rollback": "knex migrate:rollback",
     "migrate-rollback-test": "NODE_ENV=test knex migrate:rollback",
     "seed": "knex seed:run",
-    "dev": "nodemon listen.js"
+    "dev": "nodemon listen.js",
+    "seed:prod": "NODE_ENV=production DB_URL=$(heroku config:get DATABASE_URL) knex seed:run",
+    "migrate:latest:prod": "NODE_ENV=production DB_URL=$(heroku config:get DATABASE_URL) knex migrate:latest",
+    "migrate:rollback:prod": "NODE_ENV=production DB_URL=$(heroku config:get DATABASE_URL) knex migrate:rollback"
   },
   "repository": {
     "type": "git",
@@ -21,7 +25,6 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
   "bugs": {
     "url": "https://github.com/marco-iann/nc-news/issues"
   },
