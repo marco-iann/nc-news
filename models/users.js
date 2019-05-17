@@ -1,5 +1,9 @@
 const connection = require('../db/connection');
 
+const selectUsers = () => {
+  return connection('users').select('*');
+};
+
 const selectUserByUsername = username => {
   return connection('users')
     .select('*')
@@ -7,4 +11,4 @@ const selectUserByUsername = username => {
     .first();
 };
 
-module.exports = { selectUserByUsername };
+module.exports = { selectUsers, selectUserByUsername };

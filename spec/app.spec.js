@@ -561,30 +561,56 @@ describe('/api', () => {
         });
     });
   });
-  describe('/users/:username', () => {
-    it('GET: status 200 - responds with selected user', () => {
+  describe.only('/users', () => {
+    it('GET: status 200 - responds with a list of all users', () => {
       return request(app)
-        .get('/api/users/rogersop')
+        .get('/api/users')
         .expect(200)
         .then(({ body }) => {
-          expect(body.user).to.have.all.keys('username', 'avatar_url', 'name');
-          expect(body.user.username).to.equal('rogersop');
-          expect(body.user.name).to.equal('paul');
+          body.users.forEach(user => {
+            expect(user).to.have.all.keys('username', 'avatar_url', 'name');
+          });
         });
     });
-    it('GET: status 404 - responds with username not found if non existing username', () => {
+    it('DELETE: status 405 - responds with method not allowed', () => {
       return request(app)
-        .get('/api/users/non_existing_username')
-        .expect(404)
-        .then(({ body }) => [expect(body.msg).to.equal('username not found')]);
-    });
-    it('PUT: status 405 - responds with method not allowed', () => {
-      return request(app)
-        .put('/api/users/rogersop')
+        .delete('/api/users')
         .expect(405)
         .then(({ body }) => {
           expect(body.msg).to.equal('method not allowed');
         });
+    });
+    describe('/:username', () => {
+      it('GET: status 200 - responds with selected user', () => {
+        return request(app)
+          .get('/api/users/rogersop')
+          .expect(200)
+          .then(({ body }) => {
+            expect(body.user).to.have.all.keys(
+              'username',
+              'avatar_url',
+              'name'
+            );
+            expect(body.user.username).to.equal('rogersop');
+            expect(body.user.name).to.equal('paul');
+          });
+      });
+      it('GET: status 404 - responds with username not found if non existing username', () => {
+        return request(app)
+          .get('/api/users/non_existing_username')
+          .expect(404)
+          .then(({ body }) => [
+            expect(body.msg).to.equal('username not found')
+          ]);
+      });
+      it('PUT: status 405 - responds with method not allowed', () => {
+        return request(app)
+          .put('/api/users/rogersop')
+          .expect(405)
+          .then(({ body }) => {
+            expect(body.msg).to.equal('method not allowed');
+          });
+      });
     });
   });
 });
