@@ -561,7 +561,7 @@ describe('/api', () => {
         });
     });
   });
-  describe.only('/users', () => {
+  describe('/users', () => {
     it('GET: status 200 - responds with a list of all users', () => {
       return request(app)
         .get('/api/users')
@@ -570,6 +570,33 @@ describe('/api', () => {
           body.users.forEach(user => {
             expect(user).to.have.all.keys('username', 'avatar_url', 'name');
           });
+        });
+    });
+    it('POST: status 201 - responds with new user', () => {
+      return request(app)
+        .post('/api/users')
+        .send({
+          username: 'abc',
+          avatar_url: 'https://url.com/avatar.png',
+          name: 'Name Surname'
+        })
+        .expect(201)
+        .then(({ body }) => {
+          expect(body.user.username).to.equal('abc');
+          expect(body.user.avatar_url).to.equal('https://url.com/avatar.png');
+          expect(body.user.name).to.equal('Name Surname');
+        });
+    });
+    it('POST: status 400 - responds with invalid request body if passed user object with missing information', () => {
+      return request(app)
+        .post('/api/users')
+        .send({
+          avatar_url: 'https://url.com/avatar.png',
+          name: 'Name Surname'
+        })
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).to.equal('invalid request body');
         });
     });
     it('DELETE: status 405 - responds with method not allowed', () => {

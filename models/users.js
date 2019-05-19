@@ -4,6 +4,12 @@ const selectUsers = () => {
   return connection('users').select('*');
 };
 
+const insertUser = ({ username, avatar_url, name }) => {
+  return connection('users')
+    .insert({ username, avatar_url, name })
+    .returning('*');
+};
+
 const selectUserByUsername = username => {
   return connection('users')
     .select('*')
@@ -11,4 +17,4 @@ const selectUserByUsername = username => {
     .first();
 };
 
-module.exports = { selectUsers, selectUserByUsername };
+module.exports = { selectUsers, insertUser, selectUserByUsername };
