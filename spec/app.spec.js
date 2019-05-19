@@ -21,9 +21,7 @@ describe('/api', () => {
       .get('/api')
       .expect(200)
       .then(({ body }) => {
-        expect(body).to.eql({
-          msg: 'this is a list of endpoints with usage examples'
-        });
+        expect(body).to.have.all.keys('endpoints');
       });
   });
 
@@ -106,7 +104,7 @@ describe('/api', () => {
           // number of articles is limited by default pagination limit
           expect(body.articles).to.have.length(10);
           expect(body.articles_count).to.equal(12);
-          expect(body.articles[0].comment_count).to.equal('13');
+          expect(body.articles[0].comments_count).to.equal('13');
           body.articles.forEach(article => {
             expect(article).to.have.all.keys(
               'author',
@@ -114,7 +112,7 @@ describe('/api', () => {
               'topic',
               'created_at',
               'votes',
-              'comment_count',
+              'comments_count',
               'article_id'
             );
           });
@@ -224,7 +222,7 @@ describe('/api', () => {
               'topic',
               'created_at',
               'votes',
-              'comment_count',
+              'comments_count',
               'article_id',
               'body'
             );

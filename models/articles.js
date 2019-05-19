@@ -35,7 +35,7 @@ const selectArticles = ({
       if (p) query.offset((p - 1) * limit);
     })
     .limit(limit)
-    .count({ comment_count: 'comment_id' })
+    .count({ comments_count: 'comment_id' })
     .leftJoin('comments', 'articles.article_id', '=', 'comments.article_id')
     .groupBy('articles.article_id')
     .orderBy(sort_by, order);
@@ -54,7 +54,7 @@ const selectArticleById = id => {
     )
     .from('articles')
     .where({ 'articles.article_id': id })
-    .count({ comment_count: 'comment_id' })
+    .count({ comments_count: 'comment_id' })
     .leftJoin('comments', 'articles.article_id', '=', 'comments.article_id')
     .groupBy('articles.article_id')
     .first();
