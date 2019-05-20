@@ -25,7 +25,7 @@ describe('/api', () => {
       });
   });
 
-  it('POST: stratus 405 - responds with method not allowed for any other method on /api endpoint', () => {
+  it('POST: status 405 - responds with method not allowed for any other method on /api endpoint', () => {
     return request(app)
       .post('/api')
       .expect(405)
@@ -55,6 +55,18 @@ describe('/api', () => {
           });
         });
     });
+
+    it('POST: status 201 - responds with new topic', () => {
+      return request(app)
+        .post('/api/topics')
+        .send({ slug: 'topic slug', description: 'topic description' })
+        .expect(201)
+        .then(({ body }) => {
+          expect(body.topic.slug).to.equal('topic slug');
+          expect(body.topic.description).to.equal('topic description');
+        });
+    });
+
     it('DELETE: status 405 - responds with method not allowed', () => {
       return request(app)
         .delete('/api/topics')

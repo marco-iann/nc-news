@@ -7,6 +7,12 @@ exports.selectTopics = () => {
     .returning('*');
 };
 
+exports.insertTopic = ({ slug, description }) => {
+  return connection('topics')
+    .insert({ slug, description })
+    .returning('*');
+};
+
 exports.selectTopicBySlug = slug => {
   return connection('topics')
     .select('*')

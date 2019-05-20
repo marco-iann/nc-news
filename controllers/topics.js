@@ -1,8 +1,18 @@
-const { selectTopics, selectTopicBySlug } = require('../models/topics');
+const {
+  selectTopics,
+  insertTopic,
+  selectTopicBySlug
+} = require('../models/topics');
 
 exports.getTopics = (req, res, next) => {
   selectTopics().then(topics => {
     res.status(200).send({ topics });
+  });
+};
+
+exports.postTopic = (req, res, next) => {
+  insertTopic(req.body).then(([topic]) => {
+    res.status(201).send({ topic });
   });
 };
 

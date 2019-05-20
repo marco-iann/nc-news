@@ -12,6 +12,19 @@
         ]
       }
     },
+    "POST /api/topics": {
+      "description": "adds a new topic",
+      "requestBody": {
+        "slug": "javascript",
+        "description": "everything related to javascript"
+      },
+      "exampleResponse": {
+        "topic": {
+          "slug": "javascript",
+          "description": "everything related to javascript"
+        }
+      }
+    },
     "GET /api/topics/:slug": {
       "description": "serves details about a specified topic",
       "exampleResponse": {

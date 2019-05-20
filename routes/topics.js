@@ -1,11 +1,16 @@
 const topicsRouter = require('express').Router();
 
-const { getTopics, getTopicBySlug } = require('../controllers/topics');
+const {
+  getTopics,
+  postTopic,
+  getTopicBySlug
+} = require('../controllers/topics');
 const { methodNotAllowed } = require('../errors');
 
 topicsRouter
   .route('/')
   .get(getTopics)
+  .post(postTopic)
   .all(methodNotAllowed);
 
 topicsRouter
