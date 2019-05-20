@@ -108,6 +108,10 @@
         }
       }
     },
+    "DELETE /api/articles/:article_id": {
+      "description": "deletes selected article and all its comments",
+      "exampleResponse": {}
+    },
     "GET /api/articles/:article_id/comments": {
       "description": "serves an array of all the comments to an article",
       "queries": ["sort_by", "order", "author", "limit"],

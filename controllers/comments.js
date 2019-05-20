@@ -34,7 +34,7 @@ exports.deleteCommentById = (req, res, next) => {
   const { comment_id } = req.params;
   removeCommentById(comment_id)
     .then(deleted => {
-      if (deleted.length === 0)
+      if (deleted === 0)
         return Promise.reject({ code: 404, msg: 'comment not found' });
       res.status(204).send();
     })

@@ -7,11 +7,13 @@ exports.up = function(knex, Promise) {
     articlesTable
       .string('topic')
       .references('topics.slug')
-      .notNullable();
+      .notNullable()
+      .onDelete('CASCADE');
     articlesTable
       .string('author')
       .references('users.username')
-      .notNullable();
+      .notNullable()
+      .onDelete('CASCADE');
     articlesTable.timestamp('created_at').defaultTo(knex.fn.now(6));
   });
 };

@@ -18,7 +18,9 @@ const updateCommentById = (id, inc_votes) => {
 };
 
 const removeCommentById = id => {
-  return connection('comments').where({ comment_id: id });
+  return connection('comments')
+    .where({ comment_id: id })
+    .del();
 };
 
 module.exports = { selectCommentById, updateCommentById, removeCommentById };

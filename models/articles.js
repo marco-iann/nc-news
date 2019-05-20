@@ -81,6 +81,12 @@ const updateArticleById = (id, inc_votes) => {
     .then(([article]) => article);
 };
 
+const removeArticleById = id => {
+  return connection('articles')
+    .where({ article_id: id })
+    .del();
+};
+
 const selectCommentsByArticleId = (
   id,
   { order = 'desc', sort_by = 'created_at', limit = 10, p = 1 }
@@ -111,6 +117,7 @@ module.exports = {
   insertArticle,
   selectArticleById,
   updateArticleById,
+  removeArticleById,
   selectCommentsByArticleId,
   insertCommentByArticleId
 };

@@ -4,11 +4,13 @@ exports.up = function(knex, Promise) {
     commentsTable
       .string('author')
       .references('users.username')
-      .notNullable();
+      .notNullable()
+      .onDelete('CASCADE');
     commentsTable
       .integer('article_id')
       .references('articles.article_id')
-      .notNullable();
+      .notNullable()
+      .onDelete('CASCADE');
     commentsTable.text('body').notNullable();
     commentsTable.integer('votes').defaultsTo(0);
     commentsTable.timestamp('created_at').defaultTo(knex.fn.now(6));

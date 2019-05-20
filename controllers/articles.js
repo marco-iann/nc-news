@@ -4,6 +4,7 @@ const {
   insertArticle,
   selectArticleById,
   updateArticleById,
+  removeArticleById,
   selectCommentsByArticleId,
   insertCommentByArticleId
 } = require('../models/articles');
@@ -60,6 +61,17 @@ exports.patchArticleById = (req, res, next) => {
       if (!article)
         return Promise.reject({ code: 404, msg: 'article not found' });
       res.status(200).send({ article });
+    })
+    .catch(next);
+};
+
+exports.deleteArticleById = (req, res, next) => {
+  const { article_id } = req.params;
+  removeArticleById(article_id)
+    .then(deleted => {
+      if (deleted === 0)
+        return Promise.reject({ code: 404, msg: 'article not found' });
+      res.status(204).send();
     })
     .catch(next);
 };

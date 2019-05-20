@@ -239,9 +239,24 @@ describe('/api', () => {
         });
     });
 
-    it('DELETE: status 405 - responds with method not allowed', () => {
+    it('DELETE: status 204 - deletes selected article and all its comments', () => {
       return request(app)
-        .delete('/api/articles')
+        .delete('/api/articles/1')
+        .expect(204);
+    });
+
+    it('DELETE: status 404 - responds with article not found if passed an non existing article', () => {
+      return request(app)
+        .delete('/api/articles/9999')
+        .expect(404)
+        .then(({ body }) => {
+          expect(body.msg).to.equal('article not found');
+        });
+    });
+
+    it('PUT: status 405 - responds with method not allowed', () => {
+      return request(app)
+        .put('/api/articles')
         .expect(405)
         .then(({ body }) => {
           expect(body.msg).to.equal('method not allowed');
