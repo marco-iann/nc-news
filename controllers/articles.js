@@ -1,6 +1,7 @@
 const {
   countArticles,
   selectArticles,
+  insertArticle,
   selectArticleById,
   updateArticleById,
   selectCommentsByArticleId,
@@ -26,6 +27,14 @@ exports.getArticles = (req, res, next) => {
       else if (!topic && req.query.topic)
         return Promise.reject({ code: 404, msg: 'topic not found' });
       else res.status(200).send({ articles_count, articles });
+    })
+    .catch(next);
+};
+
+exports.postArticle = (req, res, next) => {
+  insertArticle(req.body)
+    .then(([article]) => {
+      res.status(201).send({ article });
     })
     .catch(next);
 };

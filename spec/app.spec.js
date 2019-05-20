@@ -201,6 +201,32 @@ describe('/api', () => {
           expect(body.msg).to.equal('topic not found');
         });
     });
+
+    it('POST: status 201 =  responds with the new article', () => {
+      return request(app)
+        .post('/api/articles')
+        .send({
+          username: 'rogersop',
+          title: 'title of the article',
+          topic: 'cats',
+          body: 'body of the article'
+        })
+        .expect(201)
+        .then(({ body }) => {
+          expect(body.article).to.have.all.keys(
+            'article_id',
+            'title',
+            'body',
+            'votes',
+            'topic',
+            'author',
+            'created_at'
+          );
+          expect(body.article.article_id).to.equal(13);
+          expect(body.article.title).to.equal('title of the article');
+        });
+    });
+
     it('DELETE: status 405 - responds with method not allowed', () => {
       return request(app)
         .delete('/api/articles')

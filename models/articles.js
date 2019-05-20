@@ -41,6 +41,17 @@ const selectArticles = ({
     .orderBy(sort_by, order);
 };
 
+const insertArticle = ({ username, topic, title, body }) => {
+  return connection('articles')
+    .insert({
+      author: username,
+      topic,
+      title,
+      body
+    })
+    .returning('*');
+};
+
 const selectArticleById = id => {
   return connection
     .select(
@@ -97,6 +108,7 @@ const insertCommentByArticleId = (id, { username, body }) => {
 module.exports = {
   countArticles,
   selectArticles,
+  insertArticle,
   selectArticleById,
   updateArticleById,
   selectCommentsByArticleId,

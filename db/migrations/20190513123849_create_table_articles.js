@@ -12,7 +12,7 @@ exports.up = function(knex, Promise) {
       .string('author')
       .references('users.username')
       .notNullable();
-    articlesTable.timestamp('created_at').notNullable();
+    articlesTable.timestamp('created_at').defaultTo(knex.fn.now(6));
   });
 };
 
