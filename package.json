@@ -6,7 +6,6 @@
   "scripts": {
     "start": "node listen.js",
     "test": "mocha spec/*.spec.js",
-    "test-utils": "mocha --watch ./db/utils/utils.spec.js",
     "setup-db": "psql -f ./db/setup.sql",
     "migrate-make": "knex migrate:make",
     "migrate-latest": "knex migrate:latest",
