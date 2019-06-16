@@ -2,6 +2,8 @@
 
 This repository contains a RESTful API, for a Reddit-style website called Northcoders News. Northcoders News has a database of articles created by users and allows for comments to be added to articles. Both of articles and comments can be upvoted or downvoted by users.
 
+You can visit the hosted project [here](https://marco-iann-nc-news-api.herokuapp.com/api/), hosted on [Heroku](https://dashboard.heroku.com/)
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
@@ -50,7 +52,7 @@ module.exports = { username: 'username', password: 'password' };
 
 With username and password being your psql username and password
 
-## Running the tests
+### Running the tests
 
 You can run all test with a single script:
 
@@ -58,7 +60,7 @@ You can run all test with a single script:
 npm test
 ```
 
-## Running dev server
+### Running dev server
 
 ```
 npm run dev
