@@ -424,19 +424,3 @@ Finds a user by its username
 ## Author
 
 - **Marco F. Iannuzzi** - _Initial work_ - [marco-iann](https://github.com/marco-iann)
-
-```
-
-```
-
-```
-
-```
-
-```
-
-```
-
-```
-
-```
